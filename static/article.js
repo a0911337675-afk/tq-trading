@@ -22,6 +22,24 @@ const articleLinkMap = {
     "15_future_of_trading.md": "future-of-trading",
 };
 
+const seriesTitleMap = {
+    "第一章｜交易的起源：從股份公司到現代市場": "trade-origin",
+    "第二章｜人工喊價時代：交易員、交易池與資訊優勢": "open-outcry-era",
+    "第三章｜數學正式進入金融：從平均數到投資組合理論": "math-enters-finance",
+    "第四章｜技術分析黃金年代：大眾最常用的交易公式": "technical-analysis-formulas",
+    "第五章｜程式交易的誕生：國外何時開始自動化交易": "program-trading-birth",
+    "第六章｜傳奇量化基金：從 Jim Simons 到現代 Quant": "legendary-quant-funds",
+    "第七章｜高頻交易：速度、延遲與市場微結構": "high-frequency-trading",
+    "第八章｜統計套利：Z-score、配對交易與均值回歸": "statistical-arbitrage",
+    "第九章｜現代量化交易系統：從 Python 到 API 自動下單": "modern-quant-system",
+    "第十章｜AI 如何改變交易：從機器學習到大型語言模型": "ai-machine-learning-trading",
+    "第十一章｜加密貨幣量化：24 小時市場的新實驗場": "crypto-quant-trading",
+    "第十二章｜真正長期存在的策略：趨勢、均值、套利與做市": "profitable-strategy-types",
+    "第十三章｜大眾最常用金融數學公式總整理": "trading-formula-library",
+    "第十四章｜現代大型量化公司：技術、人才與護城河": "major-quant-firms",
+    "第十五章｜未來十年交易會如何演變：AI Agent、量子運算與自適應系統": "future-of-trading",
+};
+
 function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, (char) => {
         const entities = {
@@ -196,19 +214,35 @@ function openList(type, state, output, className = "") {
 
 function renderSeriesItem(value) {
     const matched = value.match(/^\[([^\]]+)\]\(([^)]+)\)[：:]\s*(.*)$/);
-    if (!matched) {
-        return `<li>${renderInline(value)}</li>`;
+    if (matched) {
+        const [, title, href, description] = matched;
+        return `
+            <li class="series-shortcut">
+                <a href="${escapeHtml(normalizeHref(href))}">
+                    <span>${escapeHtml(title)}</span>
+                    <em>${escapeHtml(description)}</em>
+                </a>
+            </li>
+        `;
     }
 
-    const [, title, href, description] = matched;
-    return `
-        <li class="series-shortcut">
-            <a href="${escapeHtml(normalizeHref(href))}">
-                <span>${escapeHtml(title)}</span>
-                <em>${escapeHtml(description)}</em>
-            </a>
-        </li>
-    `;
+    for (const [title, slug] of Object.entries(seriesTitleMap)) {
+        const prefixes = [`${title}：`, `${title}:`];
+        const prefix = prefixes.find((candidate) => value.startsWith(candidate));
+        if (!prefix) continue;
+
+        const description = value.slice(prefix.length).trim();
+        return `
+            <li class="series-shortcut">
+                <a href="/articles/${escapeHtml(slug)}">
+                    <span>${escapeHtml(title)}</span>
+                    <em>${escapeHtml(description)}</em>
+                </a>
+            </li>
+        `;
+    }
+
+    return `<li>${renderInline(value)}</li>`;
 }
 
 function renderMarkdown(markdown) {

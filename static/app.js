@@ -9,6 +9,14 @@ const categoryList = document.querySelector("#categoryList");
 const articleFilters = document.querySelector("#articleFilters");
 let currentCategory = new URLSearchParams(window.location.search).get("category") || "";
 
+function isSeriesChapter(article) {
+    return /^第[一二三四五六七八九十]+章｜/.test(article.title);
+}
+
+function visibleIndexArticles(articles) {
+    return articles.filter((article) => !isSeriesChapter(article));
+}
+
 function syncRouteMode() {
     document.body.classList.toggle("article-route", window.location.pathname === "/articles");
 }
@@ -117,10 +125,11 @@ async function loadArticles(search = "", category = currentCategory) {
     if (search) params.set("search", search);
     const query = params.toString() ? `?${params.toString()}` : "";
     const payload = await requestJson(`/api/articles${query}`);
-    articleCards.innerHTML = payload.articles.length
-        ? payload.articles.map(articleTemplate).join("")
+    const articles = visibleIndexArticles(payload.articles);
+    articleCards.innerHTML = articles.length
+        ? articles.map(articleTemplate).join("")
         : `<p class="article-empty">目前沒有符合條件的文章</p>`;
-    quickArticleLinks.innerHTML = payload.articles.slice(0, 8).map((article) => `
+    quickArticleLinks.innerHTML = articles.slice(0, 8).map((article) => `
         <a href="/articles/${escapeHtml(article.slug)}">
             <img src="/assets/stock-finance-banner.png" alt="">
             <span>${escapeHtml(article.title)}</span>

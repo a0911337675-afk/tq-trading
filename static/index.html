@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TQ Trading</title>
-    <link rel="stylesheet" href="/styles.css?v=compact-articles-1">
+    <link rel="stylesheet" href="/styles.css?v=article-index-2">
 </head>
 <body>
     <header class="site-header">
@@ -23,7 +23,7 @@
         <nav class="main-nav" aria-label="主選單">
             <a class="active" href="/">首頁</a>
             <a href="#categories">文章類別</a>
-            <a href="#articles">文章</a>
+            <a href="/articles">文章</a>
             <a href="#summary">內容總覽</a>
         </nav>
     </header>
@@ -93,10 +93,13 @@
                     </div>
                 </section>
 
-                <section class="article-list compact-articles" id="articles">
-                    <div class="block-title">
-                        <span>最新文章</span>
+                <section class="article-list compact-articles article-index" id="articles">
+                    <div class="article-index-head">
+                        <p class="section-kicker">AI · CODE · QUANT</p>
+                        <h2>最新文章</h2>
+                        <p>整理量化交易、AI 工具、策略研究與市場觀察，快速找到你想看的主題。</p>
                     </div>
+                    <div class="article-filters" id="articleFilters" aria-label="文章分類篩選"></div>
                     <div class="article-grid" id="articleCards"></div>
                 </section>
             </section>
@@ -120,6 +123,6 @@
     </main>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="/app.js?v=compact-articles-1"></script>
+    <script src="/app.js?v=article-index-2"></script>
 </body>
 </html>

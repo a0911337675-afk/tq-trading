@@ -207,9 +207,34 @@ def import_articles(conn: sqlite3.Connection) -> None:
         )
 
 
-def list_articles(search: str = "") -> list[dict]:
+def resolve_category_filter(value: str = "") -> str:
+    cleaned = value.strip()
+    if not cleaned:
+        return ""
+
+    aliases = {
+        "ai": "AI的經濟/資訊/文章",
+        "ai-articles": "AI的經濟/資訊/文章",
+        "quant": "量化基礎",
+        "trading": "交易實戰",
+        "tools": "工具對比",
+    }
+    if cleaned in aliases:
+        return aliases[cleaned]
+
+    for item in ARTICLE_CATEGORY_DEFINITIONS:
+        if cleaned in {item["slug"], item["name"]}:
+            return item["name"]
+    return cleaned
+
+
+def list_articles(search: str = "", category: str = "") -> list[dict]:
     params: list[str] = []
     where = "WHERE status = 'published'"
+    category_name = resolve_category_filter(category)
+    if category_name:
+        where += " AND category = ?"
+        params.append(category_name)
     if search:
         where += " AND (title LIKE ? OR excerpt LIKE ? OR category LIKE ?)"
         keyword = f"%{search}%"
@@ -418,9 +443,10 @@ class StockRequestHandler(SimpleHTTPRequestHandler):
         if parsed.path == "/api/articles":
             params = parse_qs(parsed.query)
             search = params.get("search", [""])[0].strip()
+            category = params.get("category", [""])[0].strip()
             if search:
                 increment_search_count()
-            self.send_json({"articles": list_articles(search)})
+            self.send_json({"articles": list_articles(search, category)})
             return
 
         if parsed.path == "/api/categories":
@@ -434,6 +460,9 @@ class StockRequestHandler(SimpleHTTPRequestHandler):
             except LookupError as exc:
                 self.send_json({"error": str(exc)}, HTTPStatus.NOT_FOUND)
             return
+
+        if parsed.path == "/articles":
+            self.path = "/index.html"
 
         if parsed.path.startswith("/articles/"):
             self.path = "/article.html"

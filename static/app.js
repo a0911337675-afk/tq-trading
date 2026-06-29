@@ -38,6 +38,9 @@ async function requestJson(url) {
 }
 
 function articleTemplate(article) {
+    const excerpt = article.excerpt.length > 72
+        ? `${article.excerpt.slice(0, 72)}...`
+        : article.excerpt;
     return `
         <article class="article-card" data-category="${escapeHtml(article.category)}">
             <a href="/articles/${escapeHtml(article.slug)}">
@@ -47,7 +50,7 @@ function articleTemplate(article) {
             <div>
                 <h3><a href="/articles/${escapeHtml(article.slug)}">${escapeHtml(article.title)}</a></h3>
                 <p class="meta">by TQ Trading　${escapeHtml(article.published_at.slice(0, 10))}</p>
-                <p>${escapeHtml(article.excerpt)}</p>
+                <p>${escapeHtml(excerpt)}</p>
             </div>
         </article>
     `;
@@ -88,7 +91,7 @@ async function loadArticles(search = "") {
     articleCards.innerHTML = payload.articles.length
         ? payload.articles.map(articleTemplate).join("")
         : `<p>目前沒有符合條件的文章</p>`;
-    quickArticleLinks.innerHTML = payload.articles.map((article) => `
+    quickArticleLinks.innerHTML = payload.articles.slice(0, 8).map((article) => `
         <a href="/articles/${escapeHtml(article.slug)}">
             <img src="/assets/stock-finance-banner.png" alt="">
             <span>${escapeHtml(article.title)}</span>

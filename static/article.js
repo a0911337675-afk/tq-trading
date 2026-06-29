@@ -31,19 +31,27 @@ function flushParagraph(parts, output) {
     parts.length = 0;
 }
 
+function closeList(state, output) {
+    if (!state.type) return;
+    output.push(`</${state.type}>`);
+    state.type = "";
+}
+
 function renderMarkdown(markdown) {
     const lines = markdown.split(/\r?\n/);
     const output = [];
     const paragraph = [];
-    let inList = false;
+    const listState = { type: "" };
     let inCode = false;
     let codeLines = [];
+    let inCallout = false;
 
     for (const rawLine of lines) {
         const line = rawLine.trimEnd();
 
         if (line.startsWith("```")) {
             flushParagraph(paragraph, output);
+            closeList(listState, output);
             if (inCode) {
                 output.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
                 codeLines = [];
@@ -59,35 +67,67 @@ function renderMarkdown(markdown) {
             continue;
         }
 
+        if (line.trim() === ":::note") {
+            flushParagraph(paragraph, output);
+            closeList(listState, output);
+            output.push(`<aside class="article-note">`);
+            inCallout = true;
+            continue;
+        }
+
+        if (line.trim() === ":::") {
+            flushParagraph(paragraph, output);
+            if (inCallout) {
+                output.push(`</aside>`);
+                inCallout = false;
+            }
+            continue;
+        }
+
         if (!line.trim()) {
             flushParagraph(paragraph, output);
-            if (inList) {
-                output.push("</ul>");
-                inList = false;
-            }
+            closeList(listState, output);
             continue;
         }
 
         const heading = line.match(/^(#{1,3})\s+(.*)$/);
         if (heading) {
             flushParagraph(paragraph, output);
-            if (inList) {
-                output.push("</ul>");
-                inList = false;
-            }
+            closeList(listState, output);
             const level = heading[1].length;
             output.push(`<h${level}>${escapeHtml(heading[2])}</h${level}>`);
+            continue;
+        }
+
+        const quote = line.match(/^>\s?(.*)$/);
+        if (quote) {
+            flushParagraph(paragraph, output);
+            closeList(listState, output);
+            output.push(`<blockquote>${escapeHtml(quote[1])}</blockquote>`);
             continue;
         }
 
         const bullet = line.match(/^[-*]\s+(.*)$/);
         if (bullet) {
             flushParagraph(paragraph, output);
-            if (!inList) {
+            if (listState.type !== "ul") {
+                closeList(listState, output);
                 output.push("<ul>");
-                inList = true;
+                listState.type = "ul";
             }
             output.push(`<li>${escapeHtml(bullet[1])}</li>`);
+            continue;
+        }
+
+        const ordered = line.match(/^\d+\.\s+(.*)$/);
+        if (ordered) {
+            flushParagraph(paragraph, output);
+            if (listState.type !== "ol") {
+                closeList(listState, output);
+                output.push("<ol>");
+                listState.type = "ol";
+            }
+            output.push(`<li>${escapeHtml(ordered[1])}</li>`);
             continue;
         }
 
@@ -95,7 +135,8 @@ function renderMarkdown(markdown) {
     }
 
     flushParagraph(paragraph, output);
-    if (inList) output.push("</ul>");
+    closeList(listState, output);
+    if (inCallout) output.push(`</aside>`);
     if (inCode) output.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
     return output.join("");
 }

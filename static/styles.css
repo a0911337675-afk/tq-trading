@@ -715,6 +715,32 @@ dialog::backdrop {
     padding-left: 24px;
 }
 
+.article-body ol {
+    margin: 0 0 18px;
+    padding-left: 24px;
+}
+
+.article-body blockquote {
+    margin: 0 0 20px;
+    border-left: 4px solid var(--yellow);
+    padding: 12px 16px;
+    background: #fff9cf;
+    color: #1a1a1a;
+    font-weight: 700;
+}
+
+.article-note {
+    display: block;
+    margin: 24px 0;
+    border-left: 4px solid var(--blue);
+    padding: 14px 16px;
+    background: #f2f6fb;
+}
+
+.article-note p:last-child {
+    margin-bottom: 0;
+}
+
 .article-body pre {
     overflow-x: auto;
     padding: 16px;

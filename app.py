@@ -22,6 +22,22 @@ ARTICLE_CATEGORIES = {
     "article_strategy.md": "交易實戰",
     "article_math_finance.md": "工具對比",
     "article_machine_learning.md": "AI的經濟/資訊/文章",
+    "00_index.md": "量化基礎",
+    "01_trade_origin.md": "量化基礎",
+    "02_open_outcry.md": "量化基礎",
+    "03_math_enters_finance.md": "量化基礎",
+    "04_technical_analysis.md": "工具對比",
+    "05_program_trading_birth.md": "交易實戰",
+    "06_quant_funds.md": "交易實戰",
+    "07_high_frequency_trading.md": "交易實戰",
+    "08_statistical_arbitrage.md": "交易實戰",
+    "09_modern_quant_system.md": "交易實戰",
+    "10_ai_machine_learning.md": "AI的經濟/資訊/文章",
+    "11_crypto_quant.md": "交易實戰",
+    "12_profitable_strategies.md": "交易實戰",
+    "13_formula_library.md": "工具對比",
+    "14_major_quant_firms.md": "交易實戰",
+    "15_future_of_trading.md": "AI的經濟/資訊/文章",
 }
 
 ARTICLE_CATEGORY_DEFINITIONS = [
@@ -104,14 +120,38 @@ def init_site_stats(conn: sqlite3.Connection) -> None:
     )
 
 
-def article_slug(path: Path) -> str:
+def parse_frontmatter(content: str) -> tuple[dict[str, str], str]:
+    lines = content.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return {}, content
+
+    meta: dict[str, str] = {}
+    for index, line in enumerate(lines[1:], start=1):
+        if line.strip() == "---":
+            body = "\n".join(lines[index + 1 :]).strip()
+            return meta, body
+        if ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        cleaned = value.strip().strip('"').strip("'")
+        meta[key.strip()] = cleaned
+    return {}, content
+
+
+def article_slug(path: Path, meta: dict[str, str] | None = None) -> str:
+    if meta and meta.get("slug"):
+        return re.sub(r"[^a-z0-9-]+", "-", meta["slug"].lower()).strip("-")
+
     name = path.stem
     if name.startswith("article_"):
         name = name.removeprefix("article_")
     return re.sub(r"[^a-z0-9-]+", "-", name.lower()).strip("-")
 
 
-def article_title(content: str, fallback: str) -> str:
+def article_title(content: str, fallback: str, meta: dict[str, str] | None = None) -> str:
+    if meta and meta.get("title"):
+        return meta["title"]
+
     for line in content.splitlines():
         stripped = line.strip()
         if stripped.startswith("# "):
@@ -119,11 +159,21 @@ def article_title(content: str, fallback: str) -> str:
     return fallback
 
 
-def article_excerpt(content: str) -> str:
+def article_excerpt(content: str, meta: dict[str, str] | None = None) -> str:
+    if meta and meta.get("description"):
+        return meta["description"]
+
     for line in content.splitlines():
         stripped = line.strip()
-        if not stripped or stripped.startswith("#"):
+        if (
+            not stripped
+            or stripped == "---"
+            or stripped.startswith("#")
+            or stripped.startswith(":::")
+        ):
             continue
+        if stripped.startswith(">"):
+            stripped = stripped.lstrip("> ").strip()
         return stripped[:150]
     return ""
 
@@ -134,11 +184,12 @@ def import_articles(conn: sqlite3.Connection) -> None:
         return
 
     for path in sorted(article_dir.glob("*.md")):
-        content = path.read_text(encoding="utf-8")
-        slug = article_slug(path)
-        title = article_title(content, path.stem)
+        raw_content = path.read_text(encoding="utf-8")
+        meta, content = parse_frontmatter(raw_content)
+        slug = article_slug(path, meta)
+        title = article_title(content, path.stem, meta)
         category = ARTICLE_CATEGORIES.get(path.name, "文章")
-        excerpt = article_excerpt(content)
+        excerpt = article_excerpt(content, meta)
         conn.execute(
             """
             INSERT INTO articles (slug, title, category, excerpt, content, source_file, status)

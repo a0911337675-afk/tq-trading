@@ -228,7 +228,17 @@ def resolve_category_filter(value: str = "") -> str:
     return cleaned
 
 
-def list_articles(search: str = "", category: str = "") -> list[dict]:
+def is_index_hidden_article(article: dict | sqlite3.Row) -> bool:
+    source_file = str(article["source_file"]).replace("\\", "/")
+    filename = source_file.rsplit("/", 1)[-1]
+    return re.match(r"^(0[1-9]|1[0-5])_", filename) is not None
+
+
+def list_articles(
+    search: str = "",
+    category: str = "",
+    include_index_hidden: bool = False,
+) -> list[dict]:
     params: list[str] = []
     where = "WHERE status = 'published'"
     category_name = resolve_category_filter(category)
@@ -250,20 +260,16 @@ def list_articles(search: str = "", category: str = "") -> list[dict]:
             """,
             params,
         ).fetchall()
-    return [row_to_dict(row) for row in rows]
+    articles = [row_to_dict(row) for row in rows]
+    if not include_index_hidden:
+        articles = [article for article in articles if not is_index_hidden_article(article)]
+    return articles
 
 
 def list_article_categories() -> list[dict]:
-    with get_connection() as conn:
-        rows = conn.execute(
-            """
-            SELECT category, COUNT(*) AS article_count
-            FROM articles
-            WHERE status = 'published'
-            GROUP BY category
-            """
-        ).fetchall()
-    counts = {row["category"]: row["article_count"] for row in rows}
+    counts: dict[str, int] = {}
+    for article in list_articles():
+        counts[article["category"]] = counts.get(article["category"], 0) + 1
 
     categories = []
     for item in ARTICLE_CATEGORY_DEFINITIONS:
@@ -328,12 +334,11 @@ def increment_search_count() -> None:
 
 
 def get_summary() -> dict:
+    visible_articles = list_articles()
     with get_connection() as conn:
         article_row = conn.execute(
             """
             SELECT
-                COALESCE(SUM(CASE WHEN status = 'published' THEN 1 ELSE 0 END), 0) AS published_count,
-                COALESCE(SUM(CASE WHEN status = 'published' THEN view_count ELSE 0 END), 0) AS total_views,
                 COALESCE(SUM(CASE WHEN status = 'draft' THEN 1 ELSE 0 END), 0) AS draft_count
             FROM articles
             """
@@ -343,8 +348,8 @@ def get_summary() -> dict:
         ).fetchone()
 
     return {
-        "product_count": article_row["published_count"],
-        "total_quantity": article_row["total_views"],
+        "product_count": len(visible_articles),
+        "total_quantity": sum(article["view_count"] for article in visible_articles),
         "inventory_value": search_row["value"] if search_row else 0,
         "low_stock_count": article_row["draft_count"],
     }

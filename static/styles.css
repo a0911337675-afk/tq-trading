@@ -729,23 +729,93 @@ dialog::backdrop {
     font-weight: 700;
 }
 
-.article-note {
-    display: block;
-    margin: 24px 0;
-    border-left: 4px solid var(--blue);
-    padding: 14px 16px;
-    background: #f2f6fb;
-}
-
-.article-note p:last-child {
-    margin-bottom: 0;
-}
-
 .article-body pre {
     overflow-x: auto;
     padding: 16px;
     background: #101722;
     color: #fff;
+}
+
+.formula-card {
+    margin: 10px 0 28px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--dark);
+    background: #fbfbfb;
+    padding: 16px 18px;
+}
+
+.formula-label {
+    display: inline-flex;
+    margin-bottom: 10px;
+    background: var(--dark);
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.formula-card code {
+    display: block;
+    overflow-x: auto;
+    margin-bottom: 12px;
+    color: #001b3f;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.7;
+    white-space: nowrap;
+}
+
+.formula-card p {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.article-note {
+    margin: 24px 0;
+    border: 1px solid #cfe0f8;
+    border-left: 4px solid var(--blue);
+    background: #f2f6fb;
+}
+
+.article-note summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 0 16px;
+    color: #082f63;
+    cursor: pointer;
+    font-weight: 900;
+    list-style: none;
+}
+
+.article-note summary::-webkit-details-marker {
+    display: none;
+}
+
+.article-note summary span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--yellow);
+}
+
+.article-note[open] summary {
+    border-bottom: 1px solid #cfe0f8;
+}
+
+.article-note div {
+    padding: 16px;
+}
+
+.article-note p:last-child {
+    margin-bottom: 0;
 }
 
 @media (max-width: 620px) {

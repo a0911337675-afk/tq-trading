@@ -3,6 +3,25 @@ const articleCategory = document.querySelector("#articleCategory");
 const articleMeta = document.querySelector("#articleMeta");
 const articleBody = document.querySelector("#articleBody");
 
+const articleLinkMap = {
+    "00_index.md": "trading-history-series",
+    "01_trade_origin.md": "trade-origin",
+    "02_open_outcry.md": "open-outcry-era",
+    "03_math_enters_finance.md": "math-enters-finance",
+    "04_technical_analysis.md": "technical-analysis-formulas",
+    "05_program_trading_birth.md": "program-trading-birth",
+    "06_quant_funds.md": "legendary-quant-funds",
+    "07_high_frequency_trading.md": "high-frequency-trading",
+    "08_statistical_arbitrage.md": "statistical-arbitrage",
+    "09_modern_quant_system.md": "modern-quant-system",
+    "10_ai_machine_learning.md": "ai-machine-learning-trading",
+    "11_crypto_quant.md": "crypto-quant-trading",
+    "12_profitable_strategies.md": "profitable-strategy-types",
+    "13_formula_library.md": "trading-formula-library",
+    "14_major_quant_firms.md": "major-quant-firms",
+    "15_future_of_trading.md": "future-of-trading",
+};
+
 function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, (char) => {
         const entities = {
@@ -14,6 +33,39 @@ function escapeHtml(value) {
         };
         return entities[char];
     });
+}
+
+function normalizeHref(href) {
+    const cleaned = href.trim();
+    const fileName = cleaned.replace(/^\.?\//, "").split("#")[0];
+    if (articleLinkMap[fileName]) {
+        return `/articles/${articleLinkMap[fileName]}`;
+    }
+    if (cleaned.startsWith("/articles/") || cleaned.startsWith("#")) {
+        return cleaned;
+    }
+    if (/^https?:\/\//.test(cleaned)) {
+        return cleaned;
+    }
+    return "#";
+}
+
+function renderInline(value) {
+    const parts = [];
+    const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = linkPattern.exec(value)) !== null) {
+        parts.push(escapeHtml(value.slice(lastIndex, match.index)));
+        parts.push(`<a href="${escapeHtml(normalizeHref(match[2]))}">${escapeHtml(match[1])}</a>`);
+        lastIndex = match.index + match[0].length;
+    }
+    parts.push(escapeHtml(value.slice(lastIndex)));
+
+    return parts.join("")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>");
 }
 
 async function requestJson(url) {
@@ -131,18 +183,45 @@ function closeList(state, output) {
     if (!state.type) return;
     output.push(`</${state.type}>`);
     state.type = "";
+    state.className = "";
+}
+
+function openList(type, state, output, className = "") {
+    if (state.type === type && state.className === className) return;
+    closeList(state, output);
+    output.push(className ? `<${type} class="${className}">` : `<${type}>`);
+    state.type = type;
+    state.className = className;
+}
+
+function renderSeriesItem(value) {
+    const matched = value.match(/^\[([^\]]+)\]\(([^)]+)\)[：:]\s*(.*)$/);
+    if (!matched) {
+        return `<li>${renderInline(value)}</li>`;
+    }
+
+    const [, title, href, description] = matched;
+    return `
+        <li class="series-shortcut">
+            <a href="${escapeHtml(normalizeHref(href))}">
+                <span>${escapeHtml(title)}</span>
+                <em>${escapeHtml(description)}</em>
+            </a>
+        </li>
+    `;
 }
 
 function renderMarkdown(markdown) {
     const lines = markdown.split(/\r?\n/);
     const output = [];
     const paragraph = [];
-    const listState = { type: "" };
+    const listState = { type: "", className: "" };
     let inCode = false;
     let codeLines = [];
     let inCallout = false;
     let inFormula = false;
     let formulaLines = [];
+    let inSeriesIndex = false;
 
     for (const rawLine of lines) {
         const line = rawLine.trimEnd();
@@ -212,7 +291,9 @@ function renderMarkdown(markdown) {
             flushParagraph(paragraph, output);
             closeList(listState, output);
             const level = heading[1].length;
-            output.push(`<h${level}>${escapeHtml(heading[2])}</h${level}>`);
+            const headingText = heading[2].trim();
+            inSeriesIndex = headingText === "系列文章目錄";
+            output.push(`<h${level}>${renderInline(headingText)}</h${level}>`);
             continue;
         }
 
@@ -220,35 +301,32 @@ function renderMarkdown(markdown) {
         if (quote) {
             flushParagraph(paragraph, output);
             closeList(listState, output);
-            output.push(`<blockquote>${escapeHtml(quote[1])}</blockquote>`);
+            output.push(`<blockquote>${renderInline(quote[1])}</blockquote>`);
             continue;
         }
 
         const bullet = line.match(/^[-*]\s+(.*)$/);
         if (bullet) {
             flushParagraph(paragraph, output);
-            if (listState.type !== "ul") {
-                closeList(listState, output);
-                output.push("<ul>");
-                listState.type = "ul";
+            if (inSeriesIndex) {
+                openList("ul", listState, output, "series-shortcuts");
+                output.push(renderSeriesItem(bullet[1]));
+            } else {
+                openList("ul", listState, output);
+                output.push(`<li>${renderInline(bullet[1])}</li>`);
             }
-            output.push(`<li>${escapeHtml(bullet[1])}</li>`);
             continue;
         }
 
         const ordered = line.match(/^\d+\.\s+(.*)$/);
         if (ordered) {
             flushParagraph(paragraph, output);
-            if (listState.type !== "ol") {
-                closeList(listState, output);
-                output.push("<ol>");
-                listState.type = "ol";
-            }
-            output.push(`<li>${escapeHtml(ordered[1])}</li>`);
+            openList("ol", listState, output);
+            output.push(`<li>${renderInline(ordered[1])}</li>`);
             continue;
         }
 
-        paragraph.push(escapeHtml(line.trim()));
+        paragraph.push(renderInline(line.trim()));
     }
 
     flushParagraph(paragraph, output);

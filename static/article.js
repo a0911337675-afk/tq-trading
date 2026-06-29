@@ -68,6 +68,14 @@ function normalizeHref(href) {
     return "#";
 }
 
+function normalizeImageSrc(src) {
+    const cleaned = src.trim();
+    if (cleaned.startsWith("/assets/") || /^https?:\/\//.test(cleaned)) {
+        return cleaned;
+    }
+    return "";
+}
+
 function renderInline(value) {
     const parts = [];
     const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
@@ -84,6 +92,20 @@ function renderInline(value) {
     return parts.join("")
         .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
         .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+
+function renderImage(alt, src) {
+    const safeSrc = normalizeImageSrc(src);
+    if (!safeSrc) return "";
+    const caption = alt.trim();
+    return `
+        <figure class="article-image">
+            <a href="${escapeHtml(safeSrc)}" target="_blank" rel="noopener">
+                <img src="${escapeHtml(safeSrc)}" alt="${escapeHtml(caption)}" loading="lazy">
+            </a>
+            ${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ""}
+        </figure>
+    `;
 }
 
 async function requestJson(url) {
@@ -328,6 +350,14 @@ function renderMarkdown(markdown) {
             const headingText = heading[2].trim();
             inSeriesIndex = headingText === "系列文章目錄";
             output.push(`<h${level}>${renderInline(headingText)}</h${level}>`);
+            continue;
+        }
+
+        const image = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+        if (image) {
+            flushParagraph(paragraph, output);
+            closeList(listState, output);
+            output.push(renderImage(image[1], image[2]));
             continue;
         }
 

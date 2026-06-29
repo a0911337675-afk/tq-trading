@@ -380,12 +380,27 @@ td {
 .badge {
     display: inline-flex;
     min-width: 68px;
+    min-height: 30px;
+    align-items: center;
     justify-content: center;
     padding: 5px 9px;
     border: 1px solid #d7d7d7;
+    border-radius: 3px;
     background: #fff;
     color: var(--ink);
     font-weight: 900;
+}
+
+.category-count {
+    cursor: pointer;
+}
+
+.category-count:hover,
+.category-count:focus-visible {
+    border-color: var(--dark);
+    background: var(--yellow);
+    outline: 2px solid rgba(245, 217, 9, 0.35);
+    outline-offset: 2px;
 }
 
 .badge.low {
@@ -1003,6 +1018,11 @@ dialog::backdrop {
     border-color: rgba(2, 9, 21, 0.32);
     box-shadow: 0 16px 30px rgba(18, 15, 36, 0.08);
     transform: translateY(-2px);
+}
+
+.article-index .article-card-focus {
+    border-color: var(--yellow);
+    box-shadow: 0 0 0 3px rgba(245, 217, 9, 0.28), 0 16px 30px rgba(18, 15, 36, 0.08);
 }
 
 .article-card-body {

@@ -59,8 +59,9 @@ function articleTemplate(article) {
     const excerpt = article.excerpt.length > 96
         ? `${article.excerpt.slice(0, 96)}...`
         : article.excerpt;
+    const focusedClass = currentCategory ? " article-card-focus" : "";
     return `
-        <article class="article-card" data-category="${escapeHtml(article.category)}">
+        <article class="article-card${focusedClass}" data-category="${escapeHtml(article.category)}">
             <div class="article-card-body">
                 <div class="card-topline">
                     <span>${escapeHtml(article.category)}</span>
@@ -81,7 +82,11 @@ function categoryRowTemplate(category) {
         <tr>
             <td><span class="category-name">${escapeHtml(category.name)}</span></td>
             <td>${escapeHtml(category.description)}</td>
-            <td><span class="badge">${category.article_count}</span></td>
+            <td>
+                <button class="badge category-count" type="button" data-category-filter="${escapeHtml(category.name)}" data-category-slug="${escapeHtml(category.slug)}" aria-label="查看 ${escapeHtml(category.name)} 的 ${category.article_count} 篇文章">
+                    ${category.article_count}
+                </button>
+            </td>
             <td><span class="status-tag">${escapeHtml(category.status)}</span></td>
             <td><a class="text-link" href="/articles?category=${escapeHtml(category.slug)}" data-category-filter="${escapeHtml(category.name)}" data-category-slug="${escapeHtml(category.slug)}">查看文章</a></td>
         </tr>

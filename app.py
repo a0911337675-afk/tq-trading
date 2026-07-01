@@ -24,6 +24,7 @@ ARTICLE_CATEGORIES = {
     "article_machine_learning.md": "AI的經濟/資訊/文章",
     "ai_statement_gallery_2025_11_2026_05.md": "AI 對帳單",
     "popular_financial_products_risks.md": "量化基礎",
+    "underground_vs_legal_futures.md": "量化基礎",
     "00_index.md": "量化基礎",
     "01_trade_origin.md": "量化基礎",
     "02_open_outcry.md": "量化基礎",

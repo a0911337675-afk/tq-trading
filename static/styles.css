@@ -918,7 +918,7 @@ td {
     text-underline-offset: 4px;
 }
 
-.article-body .term-highlight {
+.term-highlight {
     color: var(--term);
     font-weight: 850;
 }

@@ -919,9 +919,6 @@ td {
 }
 
 .article-body .term-highlight {
-    border-radius: 6px;
-    padding: 0 4px;
-    background: var(--term-soft);
     color: var(--term);
     font-weight: 850;
 }

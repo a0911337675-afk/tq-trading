@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:15:00"
 title: "第十五章｜未來十年交易會如何演變：AI Agent、量子運算與自適應系統"
 description: "展望未來交易模式，包含 AI Agent、多策略自適應、LLM 研究助理、量子運算與監管變化。"
 slug: "future-of-trading"

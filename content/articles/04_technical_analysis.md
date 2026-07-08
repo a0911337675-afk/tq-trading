@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:04:00"
 title: "第四章｜技術分析黃金年代：大眾最常用的交易公式"
 description: "整理 SMA、EMA、RSI、MACD、KD、布林通道、ATR、VWAP 等最普及指標。"
 slug: "technical-analysis-formulas"

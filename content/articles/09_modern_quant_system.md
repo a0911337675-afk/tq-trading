@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:09:00"
 title: "第九章｜現代量化交易系統：從 Python 到 API 自動下單"
 description: "介紹現代量化系統架構、資料、回測、風控、實盤執行與監控。"
 slug: "modern-quant-system"

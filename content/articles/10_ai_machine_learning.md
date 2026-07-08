@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:10:00"
 title: "第十章｜AI 如何改變交易：從機器學習到大型語言模型"
 description: "介紹 Random Forest、XGBoost、LightGBM、LSTM、Transformer、強化學習與 LLM 在交易中的角色。"
 slug: "ai-machine-learning-trading"

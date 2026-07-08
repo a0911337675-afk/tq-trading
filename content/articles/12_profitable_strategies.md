@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:12:00"
 title: "第十二章｜真正長期存在的策略：趨勢、均值、套利與做市"
 description: "整理 Momentum、Trend Following、Mean Reversion、Carry、Volatility、Market Making、Pairs Trading 等長期存在的交易型態。"
 slug: "profitable-strategy-types"

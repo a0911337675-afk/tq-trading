@@ -7,7 +7,12 @@ const quickArticleLinks = document.querySelector("#quickArticleLinks");
 const categoryRows = document.querySelector("#categoryRows");
 const categoryList = document.querySelector("#categoryList");
 const articleFilters = document.querySelector("#articleFilters");
+const showMoreArticles = document.querySelector("#showMoreArticles");
 let currentCategory = new URLSearchParams(window.location.search).get("category") || "";
+let articleViewMode = localStorage.getItem("articleViewMode") || "grid";
+let articleListExpanded = false;
+let latestArticles = [];
+const collapsedArticleLimit = 9;
 
 function isSeriesChapter(article) {
     return /^第[一二三四五六七八九十]+章｜/.test(article.title);
@@ -17,8 +22,25 @@ function visibleIndexArticles(articles) {
     return articles.filter((article) => !isSeriesChapter(article));
 }
 
+function sortArticlesByPublishedAt(articles) {
+    return [...articles].sort((a, b) => {
+        const timeA = new Date(a.published_at.replace(" ", "T")).getTime();
+        const timeB = new Date(b.published_at.replace(" ", "T")).getTime();
+        return timeB - timeA;
+    });
+}
+
 function syncRouteMode() {
     document.body.classList.toggle("article-route", window.location.pathname === "/articles");
+}
+
+function syncArticleViewMode() {
+    articleCards.classList.toggle("article-view-list", articleViewMode === "list");
+    document.querySelectorAll("[data-view-mode]").forEach((button) => {
+        const active = button.dataset.viewMode === articleViewMode;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+    });
 }
 
 function showToast(message) {
@@ -130,10 +152,18 @@ async function loadArticles(search = "", category = currentCategory) {
     if (search) params.set("search", search);
     const query = params.toString() ? `?${params.toString()}` : "";
     const payload = await requestJson(`/api/articles${query}`);
-    const articles = visibleIndexArticles(payload.articles);
-    articleCards.innerHTML = articles.length
-        ? articles.map(articleTemplate).join("")
+    const articles = sortArticlesByPublishedAt(visibleIndexArticles(payload.articles));
+    latestArticles = articles;
+    const visibleArticles = articleListExpanded
+        ? articles
+        : articles.slice(0, collapsedArticleLimit);
+    articleCards.innerHTML = visibleArticles.length
+        ? visibleArticles.map(articleTemplate).join("")
         : `<p class="article-empty">目前沒有符合條件的文章</p>`;
+    showMoreArticles.hidden = articles.length <= collapsedArticleLimit;
+    showMoreArticles.textContent = articleListExpanded
+        ? "收起文章"
+        : `顯示全部 ${articles.length} 篇文章`;
     quickArticleLinks.innerHTML = articles.slice(0, 8).map((article) => `
         <a href="/articles/${escapeHtml(article.slug)}">
             <img src="/assets/stock-finance-banner.png" alt="">
@@ -154,11 +184,13 @@ async function loadCategories() {
 
 async function refresh() {
     await Promise.all([loadSummary(), loadArticles(searchInput.value.trim()), loadCategories()]);
+    syncArticleViewMode();
 }
 
 searchForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     currentCategory = "";
+    articleListExpanded = false;
     history.pushState(null, "", searchInput.value.trim() ? `/?search=${encodeURIComponent(searchInput.value.trim())}` : "/");
     syncRouteMode();
     await loadArticles(searchInput.value.trim(), "");
@@ -175,6 +207,7 @@ document.addEventListener("click", async (event) => {
     const category = filter.dataset.categoryFilter;
     const slug = filter.dataset.categorySlug || "";
     currentCategory = slug;
+    articleListExpanded = false;
     searchInput.value = "";
     history.pushState(null, "", slug ? `/articles?category=${encodeURIComponent(slug)}` : "/articles");
     syncRouteMode();
@@ -184,11 +217,30 @@ document.addEventListener("click", async (event) => {
     document.querySelector("#articles").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
+document.addEventListener("click", async (event) => {
+    const viewButton = event.target.closest("[data-view-mode]");
+    if (!viewButton) return;
+    articleViewMode = viewButton.dataset.viewMode;
+    localStorage.setItem("articleViewMode", articleViewMode);
+    syncArticleViewMode();
+});
+
+showMoreArticles.addEventListener("click", async () => {
+    articleListExpanded = !articleListExpanded;
+    await loadArticles(searchInput.value.trim(), currentCategory);
+    syncArticleViewMode();
+    if (!articleListExpanded) {
+        document.querySelector("#articles").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+});
+
 window.addEventListener("popstate", async () => {
     syncRouteMode();
     currentCategory = new URLSearchParams(window.location.search).get("category") || "";
+    articleListExpanded = false;
     await refresh();
 });
 
 syncRouteMode();
+syncArticleViewMode();
 refresh().catch((error) => showToast(error.message));

@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-30 10:00:00"
 title: "現代交易者常碰到的金融商品與主要風險"
 description: "整理股票、ETF、債券、期貨、選擇權、外匯、加密貨幣與槓桿商品的常見用途和主要風險，幫助交易者先看懂風險，再談策略。"
 slug: "popular-financial-products-risks"

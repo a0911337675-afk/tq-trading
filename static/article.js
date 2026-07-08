@@ -123,6 +123,44 @@ function flushParagraph(parts, output) {
     parts.length = 0;
 }
 
+function isTableLine(line) {
+    const trimmed = line.trim();
+    return trimmed.startsWith("|") && trimmed.endsWith("|") && trimmed.includes("|", 1);
+}
+
+function isSeparatorRow(cells) {
+    return cells.every((cell) => /^:?-{3,}:?$/.test(cell.trim()));
+}
+
+function parseTableCells(line) {
+    return line.trim().slice(1, -1).split("|").map((cell) => cell.trim());
+}
+
+function flushTable(rows, output) {
+    if (rows.length < 2) {
+        rows.forEach((row) => output.push(`<p>${renderInline(row)}</p>`));
+        rows.length = 0;
+        return;
+    }
+
+    const parsedRows = rows.map(parseTableCells);
+    const [head, separator, ...body] = parsedRows;
+    if (!isSeparatorRow(separator)) {
+        rows.forEach((row) => output.push(`<p>${renderInline(row)}</p>`));
+        rows.length = 0;
+        return;
+    }
+
+    output.push("<table>");
+    output.push(`<thead><tr>${head.map((cell) => `<th>${renderInline(cell)}</th>`).join("")}</tr></thead>`);
+    output.push("<tbody>");
+    body.forEach((row) => {
+        output.push(`<tr>${row.map((cell) => `<td>${renderInline(cell)}</td>`).join("")}</tr>`);
+    });
+    output.push("</tbody></table>");
+    rows.length = 0;
+}
+
 function simplifyFormula(formula) {
     return formula
         .replace(/^\\\[/, "")
@@ -278,6 +316,7 @@ function renderMarkdown(markdown) {
     let inFormula = false;
     let formulaLines = [];
     let inSeriesIndex = false;
+    const tableRows = [];
 
     for (const rawLine of lines) {
         const line = rawLine.trimEnd();
@@ -338,9 +377,19 @@ function renderMarkdown(markdown) {
 
         if (!line.trim()) {
             flushParagraph(paragraph, output);
+            flushTable(tableRows, output);
             closeList(listState, output);
             continue;
         }
+
+        if (isTableLine(line)) {
+            flushParagraph(paragraph, output);
+            closeList(listState, output);
+            tableRows.push(line);
+            continue;
+        }
+
+        flushTable(tableRows, output);
 
         const heading = line.match(/^(#{1,3})\s+(.*)$/);
         if (heading) {
@@ -394,6 +443,7 @@ function renderMarkdown(markdown) {
     }
 
     flushParagraph(paragraph, output);
+    flushTable(tableRows, output);
     closeList(listState, output);
     if (inCallout) output.push(`</div></details>`);
     if (inFormula) output.push(formulaBlock(formulaLines.join(" ")));

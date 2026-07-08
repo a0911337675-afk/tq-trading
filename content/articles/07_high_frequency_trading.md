@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:07:00"
 title: "第七章｜高頻交易：速度、延遲與市場微結構"
 description: "深入介紹 HFT、Latency、Co-location、FPGA、Market Making、Order Book 與 Flash Crash。"
 slug: "high-frequency-trading"

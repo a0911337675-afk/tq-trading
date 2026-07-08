@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:06:00"
 title: "第六章｜傳奇量化基金：從 Jim Simons 到現代 Quant"
 description: "介紹 Renaissance Technologies、Medallion Fund、D. E. Shaw、Citadel、Two Sigma、AQR 等代表性量化機構。"
 slug: "legendary-quant-funds"

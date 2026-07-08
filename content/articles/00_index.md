@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:00:00"
 title: "交易的演化史｜15 篇完整網站文章目錄"
 description: "從交易起源、程式交易、量化交易到 AI 交易的完整系列文章導讀。"
 slug: "trading-history-series"

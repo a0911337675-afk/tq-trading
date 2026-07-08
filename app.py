@@ -182,6 +182,18 @@ def article_excerpt(content: str, meta: dict[str, str] | None = None) -> str:
     return ""
 
 
+def article_published_at(meta: dict[str, str] | None = None) -> str | None:
+    if not meta:
+        return None
+    value = meta.get("published_at") or meta.get("date")
+    if not value:
+        return None
+    cleaned = value.strip()
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", cleaned):
+        return f"{cleaned} 09:00:00"
+    return cleaned
+
+
 def import_articles(conn: sqlite3.Connection) -> None:
     article_dir = CONTENT_DIR / "articles"
     if not article_dir.exists():
@@ -194,10 +206,11 @@ def import_articles(conn: sqlite3.Connection) -> None:
         title = article_title(content, path.stem, meta)
         category = ARTICLE_CATEGORIES.get(path.name, "文章")
         excerpt = article_excerpt(content, meta)
+        published_at = article_published_at(meta)
         conn.execute(
             """
-            INSERT INTO articles (slug, title, category, excerpt, content, source_file, status)
-            VALUES (?, ?, ?, ?, ?, ?, 'published')
+            INSERT INTO articles (slug, title, category, excerpt, content, source_file, status, published_at)
+            VALUES (?, ?, ?, ?, ?, ?, 'published', COALESCE(?, CURRENT_TIMESTAMP))
             ON CONFLICT(slug) DO UPDATE SET
                 title = excluded.title,
                 category = excluded.category,
@@ -205,9 +218,10 @@ def import_articles(conn: sqlite3.Connection) -> None:
                 content = excluded.content,
                 source_file = excluded.source_file,
                 status = 'published',
+                published_at = excluded.published_at,
                 updated_at = CURRENT_TIMESTAMP
             """,
-            (slug, title, category, excerpt, content, str(path.relative_to(BASE_DIR))),
+            (slug, title, category, excerpt, content, str(path.relative_to(BASE_DIR)), published_at),
         )
 
 
@@ -260,7 +274,7 @@ def list_articles(
             SELECT slug, title, category, excerpt, source_file, status, view_count, published_at, updated_at
             FROM articles
             {where}
-            ORDER BY id ASC
+            ORDER BY datetime(published_at) DESC, id DESC
             """,
             params,
         ).fetchall()

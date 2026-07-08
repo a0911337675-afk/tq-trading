@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:13:00"
 title: "第十三章｜大眾最常用金融數學公式總整理"
 description: "整理交易者、量化研究員與基金最常見的公式，包含統計、技術分析、風控、績效與機器學習。"
 slug: "trading-formula-library"

@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:03:00"
 title: "第三章｜數學正式進入金融：從平均數到投資組合理論"
 description: "整理平均數、標準差、共變異數、Markowitz 投資組合理論、CAPM 與 Sharpe Ratio 的金融意義。"
 slug: "math-enters-finance"

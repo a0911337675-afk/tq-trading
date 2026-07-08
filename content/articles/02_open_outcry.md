@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:02:00"
 title: "第二章｜人工喊價時代：交易員、交易池與資訊優勢"
 description: "介紹 Open Outcry、交易大廳、經紀人制度，以及資訊速度如何成為早期市場的核心獲利來源。"
 slug: "open-outcry-era"

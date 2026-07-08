@@ -1,4 +1,5 @@
 ---
+published_at: "2026-07-08 09:00:00"
 title: "期貨資金水位的問題：真正要管理的不是盈虧，而是策略能不能正常運作"
 description: "很多交易者以為賺錢就要加碼、虧錢就要縮手，但期貨交易更重要的是維持帳戶水位，讓策略留在可控的風險範圍內。"
 slug: "futures-capital-waterline-risk-management"

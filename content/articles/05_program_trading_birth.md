@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:05:00"
 title: "第五章｜程式交易的誕生：國外何時開始自動化交易"
 description: "介紹 1970–1990 年代電子報價、程式交易、Portfolio Insurance 與自動下單的發展。"
 slug: "program-trading-birth"

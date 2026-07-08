@@ -1,4 +1,5 @@
 ---
+published_at: "2026-06-29 09:08:00"
 title: "第八章｜統計套利：Z-score、配對交易與均值回歸"
 description: "介紹 Pairs Trading、Cointegration、Z-score、Kalman Filter、PCA 等統計套利核心方法。"
 slug: "statistical-arbitrage"

@@ -1,4 +1,5 @@
 ---
+published_at: "2026-07-02 09:00:00"
 title: "地下期貨與合法期貨有什麼差別？一次看懂交易安全、資金保障與風險"
 description: "整理地下期貨與合法期貨在交易制度、資金安全、價格透明度、出金保障與法律監管上的差異，幫助交易者避開高風險平台。"
 slug: "underground-vs-legal-futures-risk-guide"

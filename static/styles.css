@@ -10,7 +10,7 @@
     --accent: #0e6f64;
     --accent-soft: #e7f4f1;
     --term: #075f56;
-    --term-soft: #dff0ec;
+    --term-soft: #DFF5E1;
     --amber: #c78216;
     --amber-soft: #fbefd9;
     --blue: #315c9b;
@@ -31,8 +31,8 @@ html[data-theme="dark"] {
     --line-strong: #4a5044;
     --accent: #6fc7b7;
     --accent-soft: #17332e;
-    --term: #8de0cf;
-    --term-soft: #203d38;
+    --term: #20E0B0;
+    --term-soft: rgba(32, 224, 176, 0.16);
     --amber: #e4aa4b;
     --amber-soft: #352a18;
     --blue: #91b8ec;

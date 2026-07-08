@@ -8,7 +8,7 @@
         document.documentElement.dataset.theme = localStorage.getItem("tq-theme")
             || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     </script>
-    <link rel="stylesheet" href="/styles.css?v=typeui-refresh-4">
+    <link rel="stylesheet" href="/styles.css?v=typeui-refresh-5">
 </head>
 <body>
     <header class="site-header">
@@ -30,7 +30,7 @@
         <header class="page-intro">
             <p class="section-kicker">QUICK LINKS</p>
             <h1>快速連結</h1>
-            <p class="meta">前往期貨量化空間、Instagram 與 LINE，追蹤交易研究和最新文章。</p>
+            <p class="meta">前往期貨量化空間、個人社群與常用交易工具。</p>
         </header>
         <section class="quick-links-layout">
             <article class="qr-panel">
@@ -55,6 +55,40 @@
                     <b aria-hidden="true">↗</b>
                 </a>
             </div>
+        </section>
+        <section class="tool-links-section">
+            <div class="tool-links-head">
+                <p class="section-kicker">TRADING TOOLS</p>
+                <h2>交易工具</h2>
+                <p>策略測試、訊號整理與雲端自動下單的快速入口。</p>
+            </div>
+            <div class="tool-link-grid">
+                <a class="tool-link-card" href="https://paraninja.io/" target="_blank" rel="noopener">
+                    <span>PN</span>
+                    <div><h3>ParaNinja</h3><p>免費策略範例與參數回測工具</p></div>
+                    <b aria-hidden="true">↗</b>
+                </a>
+                <a class="tool-link-card" href="https://eltrade.io/login?returnTo=%2Fdashboard" target="_blank" rel="noopener">
+                    <span>EL</span>
+                    <div><h3>ElTrade</h3><p>免費策略訊號整理與追蹤工具</p></div>
+                    <b aria-hidden="true">↗</b>
+                </a>
+                <a class="tool-link-card" href="https://signalx.sikax.net/z/" target="_blank" rel="noopener">
+                    <span>SX</span>
+                    <div><h3>SikaX</h3><p>雲端自動化下單工具</p></div>
+                    <b aria-hidden="true">↗</b>
+                </a>
+            </div>
+            <aside class="offer-banner">
+                <div>
+                    <span>SikaX 專屬優惠</span>
+                    <strong>每月訂閱現折 500元</strong>
+                </div>
+                <div class="offer-code">
+                    <small>輸入優惠代碼</small>
+                    <code>TQQUANT</code>
+                </div>
+            </aside>
         </section>
     </main>
     <script src="/site.js?v=nav-theme-2"></script>

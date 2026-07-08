@@ -22,6 +22,7 @@ ARTICLE_CATEGORIES = {
     "article_strategy.md": "交易實戰",
     "article_math_finance.md": "工具對比",
     "article_machine_learning.md": "AI的經濟/資訊/文章",
+    "auto_trading_tools_order_machine_comparison.md": "工具對比",
     "ai_statement_gallery_2025_11_2026_05.md": "AI 對帳單",
     "popular_financial_products_risks.md": "量化基礎",
     "underground_vs_legal_futures.md": "量化基礎",

@@ -8,7 +8,7 @@
         document.documentElement.dataset.theme = localStorage.getItem("tq-theme")
             || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     </script>
-    <link rel="stylesheet" href="/styles.css?v=typeui-refresh-3">
+    <link rel="stylesheet" href="/styles.css?v=typeui-refresh-4">
 </head>
 <body>
     <header class="site-header">
@@ -22,7 +22,7 @@
     <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
         <aside class="site-drawer" id="siteDrawer" aria-label="網站選單">
             <div class="drawer-head"><strong>網站選單</strong><button type="button" data-close-menu aria-label="關閉選單">×</button></div>
-            <nav class="drawer-nav"><a href="/">首頁</a><a href="/articles">文章</a><a class="active" href="/daily">每日大事</a><a href="/faq">FAQ</a><a href="/community">個人社群</a></nav>
+            <nav class="drawer-nav"><a href="/">首頁</a><a class="active" href="/daily">每日大事</a><a href="/faq">FAQ</a><a href="/links">快速連結</a></nav>
         </aside>
     </div>
 
@@ -30,15 +30,20 @@
         <header class="page-intro">
             <p class="section-kicker">MARKET BRIEF</p>
             <h1>每日大事</h1>
-            <p class="meta">集中整理市場行事曆、重要消息與交易前需要留意的風險。</p>
+            <p class="meta">這裡將串接外部新聞程式，自動接收市場事件、重要消息與交易風險提醒。</p>
         </header>
         <section class="utility-grid">
             <article class="utility-card"><span>01</span><h2>市場焦點</h2><p>整理可能影響股票、期貨、外匯與商品市場的重要事件。</p></article>
             <article class="utility-card"><span>02</span><h2>資料行事曆</h2><p>關注利率決議、通膨、就業與主要經濟數據公布時間。</p></article>
             <article class="utility-card"><span>03</span><h2>風險提醒</h2><p>交易前確認流動性、波動、保證金與重大事件風險。</p></article>
         </section>
-        <section class="empty-state"><p class="section-kicker">TODAY</p><h2>今日內容整理中</h2><p>每日重點會以精簡、可查閱的方式更新在這個頁面。</p></section>
+        <section class="empty-state automated-news" id="automatedNewsFeed" aria-live="polite">
+            <p class="section-kicker">AUTOMATED NEWS FEED</p>
+            <h2>自動新聞串接區</h2>
+            <p>目前正在準備新聞接收程式。完成串接後，最新事件會自動依時間排序顯示，不需要手動貼到首頁。</p>
+            <span class="feed-status">等待資料來源</span>
+        </section>
     </main>
-    <script src="/site.js?v=nav-theme-1"></script>
+    <script src="/site.js?v=nav-theme-2"></script>
 </body>
 </html>

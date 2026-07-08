@@ -23,6 +23,7 @@ ARTICLE_CATEGORIES = {
     "article_math_finance.md": "工具對比",
     "article_machine_learning.md": "AI的經濟/資訊/文章",
     "auto_trading_tools_order_machine_comparison.md": "工具對比",
+    "fintech_quant_trading_infrastructure.md": "工具對比",
     "ai_statement_gallery_2025_11_2026_05.md": "AI 對帳單",
     "popular_financial_products_risks.md": "量化基礎",
     "underground_vs_legal_futures.md": "量化基礎",
@@ -494,6 +495,7 @@ class StockRequestHandler(SimpleHTTPRequestHandler):
         page_routes = {
             "/daily": "/daily.html",
             "/faq": "/faq.html",
+            "/links": "/community.html",
             "/community": "/community.html",
         }
         if parsed.path in page_routes:

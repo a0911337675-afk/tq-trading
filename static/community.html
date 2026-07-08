@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>個人社群 - TQ Trading</title>
+    <title>快速連結 - TQ Trading</title>
     <script>
         document.documentElement.dataset.theme = localStorage.getItem("tq-theme")
             || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     </script>
-    <link rel="stylesheet" href="/styles.css?v=typeui-refresh-3">
+    <link rel="stylesheet" href="/styles.css?v=typeui-refresh-4">
 </head>
 <body>
     <header class="site-header">
@@ -22,23 +22,41 @@
     <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
         <aside class="site-drawer" id="siteDrawer" aria-label="網站選單">
             <div class="drawer-head"><strong>網站選單</strong><button type="button" data-close-menu aria-label="關閉選單">×</button></div>
-            <nav class="drawer-nav"><a href="/">首頁</a><a href="/articles">文章</a><a href="/daily">每日大事</a><a href="/faq">FAQ</a><a class="active" href="/community">個人社群</a></nav>
+            <nav class="drawer-nav"><a href="/">首頁</a><a href="/daily">每日大事</a><a href="/faq">FAQ</a><a class="active" href="/links">快速連結</a></nav>
         </aside>
     </div>
 
     <main class="shell utility-page">
         <header class="page-intro">
-            <p class="section-kicker">FOLLOW TQ TRADING</p>
-            <h1>個人社群</h1>
-            <p class="meta">交易研究、工具觀察與新文章通知會集中整理在這裡。</p>
+            <p class="section-kicker">QUICK LINKS</p>
+            <h1>快速連結</h1>
+            <p class="meta">前往期貨量化空間、Instagram 與 LINE，追蹤交易研究和最新文章。</p>
         </header>
-        <section class="community-panel">
-            <div><span>01</span><h2>研究內容</h2><p>分享量化交易、自動化工具與市場風險筆記。</p></div>
-            <div><span>02</span><h2>文章通知</h2><p>新文章上線後，可從這個頁面前往對應社群。</p></div>
-            <div><span>03</span><h2>合作聯絡</h2><p>社群與聯絡方式正在整理，確認後會在此公開。</p></div>
+        <section class="quick-links-layout">
+            <article class="qr-panel">
+                <div>
+                    <p class="section-kicker">FUTURES QUANT SPACE</p>
+                    <h2>期貨量化空間</h2>
+                    <p>掃描 QR code 加入社群，取得量化交易、工具研究與文章更新。</p>
+                </div>
+                <a href="https://reurl.cc/ovXL4M" target="_blank" rel="noopener" aria-label="開啟期貨量化空間 LINE">
+                    <img src="/assets/futures-quant-space-qr.png" alt="期貨量化空間 QR code">
+                </a>
+            </article>
+            <div class="social-link-list">
+                <a class="social-link" href="https://www.instagram.com/wilson__trend?igsh=cHUxcG4wYWQwamF4&amp;utm_source=qr" target="_blank" rel="noopener">
+                    <span>IG</span>
+                    <div><strong>Instagram</strong><small>@wilson__trend</small></div>
+                    <b aria-hidden="true">↗</b>
+                </a>
+                <a class="social-link" href="https://reurl.cc/ovXL4M" target="_blank" rel="noopener">
+                    <span>LINE</span>
+                    <div><strong>期貨量化空間</strong><small>加入 LINE 社群</small></div>
+                    <b aria-hidden="true">↗</b>
+                </a>
+            </div>
         </section>
-        <section class="empty-state"><p class="section-kicker">SOCIAL LINKS</p><h2>社群連結準備中</h2><p>之後只需填入你的 LINE、YouTube、Instagram 或其他社群網址即可啟用。</p></section>
     </main>
-    <script src="/site.js?v=nav-theme-1"></script>
+    <script src="/site.js?v=nav-theme-2"></script>
 </body>
 </html>

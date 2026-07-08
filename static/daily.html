@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>每日大事 - TQ Trading</title>
+    <script>
+        document.documentElement.dataset.theme = localStorage.getItem("tq-theme")
+            || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
+    <link rel="stylesheet" href="/styles.css?v=typeui-refresh-3">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <button class="menu-toggle" id="menuToggle" type="button" aria-label="開啟選單" aria-controls="siteDrawer" aria-expanded="false"><span></span><span></span><span></span></button>
+            <a class="brand" href="/"><img src="/assets/tq-trading-logo.png" alt=""><span>TQ Trading</span></a>
+            <span class="header-spacer"></span>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="切換顯示模式"></button>
+        </div>
+    </header>
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+        <aside class="site-drawer" id="siteDrawer" aria-label="網站選單">
+            <div class="drawer-head"><strong>網站選單</strong><button type="button" data-close-menu aria-label="關閉選單">×</button></div>
+            <nav class="drawer-nav"><a href="/">首頁</a><a href="/articles">文章</a><a class="active" href="/daily">每日大事</a><a href="/faq">FAQ</a><a href="/community">個人社群</a></nav>
+        </aside>
+    </div>
+
+    <main class="shell utility-page">
+        <header class="page-intro">
+            <p class="section-kicker">MARKET BRIEF</p>
+            <h1>每日大事</h1>
+            <p class="meta">集中整理市場行事曆、重要消息與交易前需要留意的風險。</p>
+        </header>
+        <section class="utility-grid">
+            <article class="utility-card"><span>01</span><h2>市場焦點</h2><p>整理可能影響股票、期貨、外匯與商品市場的重要事件。</p></article>
+            <article class="utility-card"><span>02</span><h2>資料行事曆</h2><p>關注利率決議、通膨、就業與主要經濟數據公布時間。</p></article>
+            <article class="utility-card"><span>03</span><h2>風險提醒</h2><p>交易前確認流動性、波動、保證金與重大事件風險。</p></article>
+        </section>
+        <section class="empty-state"><p class="section-kicker">TODAY</p><h2>今日內容整理中</h2><p>每日重點會以精簡、可查閱的方式更新在這個頁面。</p></section>
+    </main>
+    <script src="/site.js?v=nav-theme-1"></script>
+</body>
+</html>

@@ -491,6 +491,14 @@ class StockRequestHandler(SimpleHTTPRequestHandler):
         if parsed.path.startswith("/articles/"):
             self.path = "/article.html"
 
+        page_routes = {
+            "/daily": "/daily.html",
+            "/faq": "/faq.html",
+            "/community": "/community.html",
+        }
+        if parsed.path in page_routes:
+            self.path = page_routes[parsed.path]
+
         if parsed.path == "/":
             self.path = "/index.html"
 

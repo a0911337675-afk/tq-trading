@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FAQ - TQ Trading</title>
+    <script>
+        document.documentElement.dataset.theme = localStorage.getItem("tq-theme")
+            || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
+    <link rel="stylesheet" href="/styles.css?v=typeui-refresh-3">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <button class="menu-toggle" id="menuToggle" type="button" aria-label="開啟選單" aria-controls="siteDrawer" aria-expanded="false"><span></span><span></span><span></span></button>
+            <a class="brand" href="/"><img src="/assets/tq-trading-logo.png" alt=""><span>TQ Trading</span></a>
+            <span class="header-spacer"></span>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="切換顯示模式"></button>
+        </div>
+    </header>
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+        <aside class="site-drawer" id="siteDrawer" aria-label="網站選單">
+            <div class="drawer-head"><strong>網站選單</strong><button type="button" data-close-menu aria-label="關閉選單">×</button></div>
+            <nav class="drawer-nav"><a href="/">首頁</a><a href="/articles">文章</a><a href="/daily">每日大事</a><a class="active" href="/faq">FAQ</a><a href="/community">個人社群</a></nav>
+        </aside>
+    </div>
+
+    <main class="shell utility-page">
+        <header class="page-intro">
+            <p class="section-kicker">HELP CENTER</p>
+            <h1>常見問題</h1>
+            <p class="meta">快速了解網站內容、文章分類與風險聲明。</p>
+        </header>
+        <section class="faq-list">
+            <details open><summary>這個網站提供投資建議嗎？</summary><p>網站內容以交易研究、工具整理與風險教育為主，不構成個人化投資建議或獲利保證。</p></details>
+            <details><summary>文章內容適合哪些讀者？</summary><p>適合想了解量化基礎、交易流程、自動化工具與金融商品風險的讀者。</p></details>
+            <details><summary>文章多久更新一次？</summary><p>文章依研究進度更新；最新內容會優先顯示在文章頁上方。</p></details>
+            <details><summary>工具比較是否代表推薦？</summary><p>比較內容用來呈現功能、限制與適用情境。實際選擇前仍應確認費用、券商支援與自身需求。</p></details>
+            <details><summary>可以引用網站文章嗎？</summary><p>可分享文章連結；若需大量轉載或商業使用，請先透過個人社群頁面聯絡。</p></details>
+        </section>
+    </main>
+    <script src="/site.js?v=nav-theme-1"></script>
+</body>
+</html>

@@ -180,8 +180,8 @@ h3 {
 
 h1 {
     max-width: 780px;
-    font-size: clamp(42px, 7vw, 82px);
-    line-height: 0.98;
+    font-size: clamp(38px, 6vw, 68px);
+    line-height: 1.02;
     font-weight: 900;
     letter-spacing: 0;
 }
@@ -725,15 +725,6 @@ td {
     line-height: 1.3;
 }
 
-.article-body h2::before {
-    content: "";
-    display: block;
-    width: 42px;
-    height: 2px;
-    margin-bottom: 14px;
-    background: var(--accent);
-}
-
 .article-body h3 {
     margin: 30px 0 10px;
     font-size: 22px;
@@ -803,6 +794,13 @@ td {
     padding: 16px;
     background: #171812;
     color: #fff;
+}
+
+.article-body pre code {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
 }
 
 .article-image {

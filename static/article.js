@@ -76,6 +76,115 @@ function normalizeImageSrc(src) {
     return "";
 }
 
+const highlightTerms = [
+    "Renaissance Technologies",
+    "Sharpe Ratio",
+    "TradingView",
+    "MultiCharts",
+    "Market Making",
+    "Order Book",
+    "Co-location",
+    "ParaNinja",
+    "ElTrade",
+    "FinTech",
+    "Webhook",
+    "SikaX",
+    "CT Pro",
+    "Python",
+    "RegTech",
+    "CAPM",
+    "VWAP",
+    "MACD",
+    "RSI",
+    "EMA",
+    "SMA",
+    "ATR",
+    "HFT",
+    "API",
+    "DMA",
+    "VPS",
+    "AI",
+    "XQ",
+    "地下期貨",
+    "合法期貨",
+    "雲端下單機",
+    "自動化下單",
+    "自動交易",
+    "量化交易",
+    "程式交易",
+    "期貨交易",
+    "加密貨幣",
+    "個股期貨",
+    "美國指數期貨",
+    "微台指",
+    "小台指",
+    "台指期",
+    "選擇權",
+    "ETF",
+    "債券",
+    "外匯",
+    "股票",
+    "期貨",
+    "回測",
+    "策略",
+    "訊號",
+    "下單機",
+    "券商",
+    "交易所",
+    "保證金",
+    "槓桿",
+    "風控",
+    "倉位",
+    "庫存",
+    "滑價",
+    "點差",
+    "出金",
+    "成交回報",
+    "委託回報",
+    "停損",
+    "停利",
+    "勝率",
+    "回撤",
+    "資金水位",
+    "Z-score",
+    "Markowitz",
+    "Kelly",
+    "Latency",
+    "FPGA",
+].sort((a, b) => b.length - a.length);
+
+function escapeRegex(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function termPattern(term) {
+    const escaped = escapeRegex(term);
+    if (/^[A-Za-z0-9 .+\-\/]+$/.test(term)) {
+        return `(?<![A-Za-z0-9])${escaped}(?![A-Za-z0-9])`;
+    }
+    return escaped;
+}
+
+const highlightPattern = new RegExp(highlightTerms.map(termPattern).join("|"), "g");
+
+function highlightText(value) {
+    return value.replace(highlightPattern, (term) => `<strong class="term-highlight">${term}</strong>`);
+}
+
+function highlightTermsInHtml(html) {
+    const parts = html.split(/(<[^>]+>)/g);
+    let inCode = false;
+    return parts.map((part) => {
+        if (!part) return "";
+        if (part.startsWith("<")) {
+            if (/^<code\b/i.test(part)) inCode = true;
+            if (/^<\/code>/i.test(part)) inCode = false;
+            return part;
+        }
+        return inCode ? part : highlightText(part);
+    }).join("");
+}
+
 function renderInline(value) {
     const parts = [];
     const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
@@ -89,9 +198,10 @@ function renderInline(value) {
     }
     parts.push(escapeHtml(value.slice(lastIndex)));
 
-    return parts.join("")
+    const html = parts.join("")
         .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
         .replace(/`([^`]+)`/g, "<code>$1</code>");
+    return highlightTermsInHtml(html);
 }
 
 function renderImage(alt, src) {

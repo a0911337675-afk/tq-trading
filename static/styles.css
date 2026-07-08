@@ -9,6 +9,8 @@
     --line-strong: #d5d1c5;
     --accent: #0e6f64;
     --accent-soft: #e7f4f1;
+    --term: #075f56;
+    --term-soft: #dff0ec;
     --amber: #c78216;
     --amber-soft: #fbefd9;
     --blue: #315c9b;
@@ -29,6 +31,8 @@ html[data-theme="dark"] {
     --line-strong: #4a5044;
     --accent: #6fc7b7;
     --accent-soft: #17332e;
+    --term: #8de0cf;
+    --term-soft: #203d38;
     --amber: #e4aa4b;
     --amber-soft: #352a18;
     --blue: #91b8ec;
@@ -912,6 +916,14 @@ td {
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 4px;
+}
+
+.article-body .term-highlight {
+    border-radius: 6px;
+    padding: 0 4px;
+    background: var(--term-soft);
+    color: var(--term);
+    font-weight: 850;
 }
 
 .article-body table {

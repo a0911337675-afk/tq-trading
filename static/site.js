@@ -45,7 +45,7 @@ function escapeRegex(value) {
 
 const terminologyPattern = new RegExp(terminologyTerms.map(escapeRegex).join("|"), "g");
 
-function highlightTerminologyTextNode(node) {
+function highlightTerminologyTextNode(node, seenTerms) {
     const text = node.nodeValue;
     terminologyPattern.lastIndex = 0;
     if (!text || !terminologyPattern.test(text)) return;
@@ -57,10 +57,15 @@ function highlightTerminologyTextNode(node) {
         if (index > lastIndex) {
             fragment.append(document.createTextNode(text.slice(lastIndex, index)));
         }
-        const mark = document.createElement("strong");
-        mark.className = "term-highlight";
-        mark.textContent = term;
-        fragment.append(mark);
+        if (seenTerms.has(term)) {
+            fragment.append(document.createTextNode(term));
+        } else {
+            seenTerms.add(term);
+            const mark = document.createElement("strong");
+            mark.className = "term-highlight";
+            mark.textContent = term;
+            fragment.append(mark);
+        }
         lastIndex = index + term.length;
         return term;
     });
@@ -73,18 +78,21 @@ function highlightTerminologyTextNode(node) {
 
 function highlightTerminology(rootElement) {
     if (!rootElement) return;
-    const walker = document.createTreeWalker(rootElement, NodeFilter.SHOW_TEXT, {
-        acceptNode(node) {
-            const parent = node.parentElement;
-            if (!parent || parent.closest("a, code, pre, script, style, .term-highlight")) {
-                return NodeFilter.FILTER_REJECT;
-            }
-            return NodeFilter.FILTER_ACCEPT;
-        },
+    rootElement.querySelectorAll("summary, p, li").forEach((block) => {
+        const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+                const parent = node.parentElement;
+                if (!parent || parent.closest("a, code, pre, script, style, .term-highlight")) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+                return NodeFilter.FILTER_ACCEPT;
+            },
+        });
+        const nodes = [];
+        const seenTerms = new Set();
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach((node) => highlightTerminologyTextNode(node, seenTerms));
     });
-    const nodes = [];
-    while (walker.nextNode()) nodes.push(walker.currentNode);
-    nodes.forEach(highlightTerminologyTextNode);
 }
 
 function preferredTheme() {

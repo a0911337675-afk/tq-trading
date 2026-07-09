@@ -167,12 +167,17 @@ function termPattern(term) {
 
 const highlightPattern = new RegExp(highlightTerms.map(termPattern).join("|"), "g");
 
-function highlightText(value) {
-    return value.replace(highlightPattern, (term) => `<strong class="term-highlight">${term}</strong>`);
+function highlightText(value, seenTerms) {
+    return value.replace(highlightPattern, (term) => {
+        if (seenTerms.has(term)) return term;
+        seenTerms.add(term);
+        return `<strong class="term-highlight">${term}</strong>`;
+    });
 }
 
 function highlightTermsInHtml(html) {
     const parts = html.split(/(<[^>]+>)/g);
+    const seenTerms = new Set();
     let inCode = false;
     return parts.map((part) => {
         if (!part) return "";
@@ -181,7 +186,7 @@ function highlightTermsInHtml(html) {
             if (/^<\/code>/i.test(part)) inCode = false;
             return part;
         }
-        return inCode ? part : highlightText(part);
+        return inCode ? part : highlightText(part, seenTerms);
     }).join("");
 }
 

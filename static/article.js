@@ -166,6 +166,7 @@ function termPattern(term) {
 }
 
 const highlightPattern = new RegExp(highlightTerms.map(termPattern).join("|"), "g");
+let seenArticleTerms = new Set();
 
 function highlightText(value, seenTerms) {
     return value.replace(highlightPattern, (term) => {
@@ -177,7 +178,6 @@ function highlightText(value, seenTerms) {
 
 function highlightTermsInHtml(html) {
     const parts = html.split(/(<[^>]+>)/g);
-    const seenTerms = new Set();
     let inCode = false;
     return parts.map((part) => {
         if (!part) return "";
@@ -186,7 +186,7 @@ function highlightTermsInHtml(html) {
             if (/^<\/code>/i.test(part)) inCode = false;
             return part;
         }
-        return inCode ? part : highlightText(part, seenTerms);
+        return inCode ? part : highlightText(part, seenArticleTerms);
     }).join("");
 }
 
@@ -421,6 +421,7 @@ function renderSeriesItem(value) {
 }
 
 function renderMarkdown(markdown) {
+    seenArticleTerms = new Set();
     const lines = markdown.split(/\r?\n/);
     const output = [];
     const paragraph = [];

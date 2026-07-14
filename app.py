@@ -28,6 +28,7 @@ ARTICLE_CATEGORIES = {
     "popular_financial_products_risks.md": "量化基礎",
     "underground_vs_legal_futures.md": "量化基礎",
     "futures_capital_waterline.md": "交易實戰",
+    "daily_news_2026_07_14_fast_id_fintech_ai.md": "每日大事",
     "00_index.md": "量化基礎",
     "01_trade_origin.md": "量化基礎",
     "02_open_outcry.md": "量化基礎",
@@ -71,6 +72,11 @@ ARTICLE_CATEGORY_DEFINITIONS = [
         "slug": "ai-econ-info-articles",
         "name": "AI的經濟/資訊/文章",
         "description": "AI、經濟、資訊整理、研究筆記與市場觀察文章。",
+    },
+    {
+        "slug": "daily-news",
+        "name": "每日大事",
+        "description": "每日整理金融、AI、金融科技與新科技的重要事件。",
     },
 ]
 
@@ -206,7 +212,7 @@ def import_articles(conn: sqlite3.Connection) -> None:
         meta, content = parse_frontmatter(raw_content)
         slug = article_slug(path, meta)
         title = article_title(content, path.stem, meta)
-        category = ARTICLE_CATEGORIES.get(path.name, "文章")
+        category = meta.get("category") or ARTICLE_CATEGORIES.get(path.name, "文章")
         excerpt = article_excerpt(content, meta)
         published_at = article_published_at(meta)
         conn.execute(
@@ -238,6 +244,8 @@ def resolve_category_filter(value: str = "") -> str:
         "quant": "量化基礎",
         "trading": "交易實戰",
         "tools": "工具對比",
+        "daily": "每日大事",
+        "daily-news": "每日大事",
     }
     if cleaned in aliases:
         return aliases[cleaned]

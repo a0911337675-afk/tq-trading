@@ -37,10 +37,16 @@
             <article class="utility-card"><span>02</span><h2>資料行事曆</h2><p>關注利率決議、通膨、就業與主要經濟數據公布時間。</p></article>
             <article class="utility-card"><span>03</span><h2>風險提醒</h2><p>交易前確認流動性、波動、保證金與重大事件風險。</p></article>
         </section>
-        <section class="empty-state automated-news" id="automatedNewsFeed" aria-live="polite">
-            <h2>尚未上傳</h2>
+        <section class="daily-news-section" aria-live="polite">
+            <div class="block-title">
+                <span>自動新聞串接區</span>
+            </div>
+            <div class="article-grid" id="dailyArticleCards">
+                <p class="article-empty">載入中...</p>
+            </div>
         </section>
     </main>
     <script src="/site.js?v=nav-theme-2"></script>
+    <script src="/daily.js?v=daily-news-1"></script>
 </body>
 </html>

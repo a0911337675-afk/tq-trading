@@ -63,7 +63,35 @@ function escapeHtml(value) {
 }
 
 function formatDate(value) {
-    return value.slice(0, 10).replaceAll("-", "/");
+    return String(value || "").slice(0, 10).replaceAll("-", "/") || "尚未發布";
+}
+
+function getPayloadList(payload, key) {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.[key])) return payload[key];
+    if (Array.isArray(payload?.value)) return payload.value;
+    if (Array.isArray(payload?.data)) return payload.data;
+    return [];
+}
+
+function normalizeArticle(article) {
+    return {
+        slug: article.slug || "",
+        title: article.title || "未命名文章",
+        category: article.category || article.category_name || "文章",
+        excerpt: article.excerpt || article.description || "",
+        published_at: article.published_at || article.created_at || article.updated_at || "",
+    };
+}
+
+function normalizeCategory(category) {
+    return {
+        slug: category.slug || category.name || "",
+        name: category.name || category.slug || "未分類",
+        description: category.description || "",
+        article_count: category.article_count ?? category.count ?? 0,
+        status: category.status || "已啟用",
+    };
 }
 
 async function requestJson(url) {
@@ -152,7 +180,9 @@ async function loadArticles(search = "", category = currentCategory) {
     if (search) params.set("search", search);
     const query = params.toString() ? `?${params.toString()}` : "";
     const payload = await requestJson(`/api/articles${query}`);
-    const articles = sortArticlesByPublishedAt(visibleIndexArticles(payload.articles));
+    const articles = sortArticlesByPublishedAt(
+        visibleIndexArticles(getPayloadList(payload, "articles").map(normalizeArticle))
+    );
     latestArticles = articles;
     const visibleArticles = articleListExpanded
         ? articles
@@ -174,11 +204,12 @@ async function loadArticles(search = "", category = currentCategory) {
 
 async function loadCategories() {
     const payload = await requestJson("/api/categories");
-    categoryRows.innerHTML = payload.categories.map(categoryRowTemplate).join("");
-    categoryList.innerHTML = payload.categories.map(categoryListTemplate).join("");
+    const categories = getPayloadList(payload, "categories").map(normalizeCategory);
+    categoryRows.innerHTML = categories.map(categoryRowTemplate).join("");
+    categoryList.innerHTML = categories.map(categoryListTemplate).join("");
     articleFilters.innerHTML = `
         <a class="article-filter${currentCategory ? "" : " active"}" href="/articles" data-category-filter="" data-category-slug="">全部</a>
-        ${payload.categories.map(articleFilterTemplate).join("")}
+        ${categories.map(articleFilterTemplate).join("")}
     `;
 }
 

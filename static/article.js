@@ -232,6 +232,24 @@ async function requestJson(url) {
     return payload;
 }
 
+function unwrapArticlePayload(payload) {
+    if (payload?.article) return payload.article;
+    if (Array.isArray(payload?.value)) return payload.value[0] || {};
+    if (Array.isArray(payload?.data)) return payload.data[0] || {};
+    if (payload?.value && typeof payload.value === "object") return payload.value;
+    if (payload?.data && typeof payload.data === "object") return payload.data;
+    return payload || {};
+}
+
+function normalizeArticlePayload(article) {
+    return {
+        title: article.title || "文章載入失敗",
+        category: article.category || article.category_name || "文章",
+        published_at: article.published_at || article.created_at || article.updated_at || "",
+        content: article.content || article.body || article.markdown || "",
+    };
+}
+
 function flushParagraph(parts, output) {
     if (!parts.length) return;
     output.push(`<p>${parts.join(" ")}</p>`);
@@ -569,11 +587,13 @@ function renderMarkdown(markdown) {
 
 async function loadArticle() {
     const slug = window.location.pathname.split("/").filter(Boolean).pop();
-    const article = await requestJson(`/api/articles/${encodeURIComponent(slug)}`);
+    const article = normalizeArticlePayload(
+        unwrapArticlePayload(await requestJson(`/api/articles/${encodeURIComponent(slug)}`))
+    );
     document.title = `${article.title} - TQ Trading`;
     articleTitle.textContent = article.title;
     articleCategory.textContent = article.category;
-    articleMeta.textContent = `by TQ Trading　${article.published_at.slice(0, 10)}`;
+    articleMeta.textContent = `by TQ Trading　${String(article.published_at).slice(0, 10) || "尚未發布"}`;
     articleBody.innerHTML = renderMarkdown(article.content);
 }
 

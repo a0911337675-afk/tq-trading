@@ -379,6 +379,10 @@ input:focus {
     color: #fff;
 }
 
+html[data-theme="dark"] #refreshButton {
+    color: #111722;
+}
+
 .hero-media {
     position: relative;
     min-height: 370px;

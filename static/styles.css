@@ -21,24 +21,24 @@
 }
 
 html[data-theme="dark"] {
-    --bg: #11130f;
-    --surface: #191c17;
-    --surface-soft: #20231d;
-    --ink: #f3f4ed;
-    --muted: #b3b7ac;
-    --subtle: #92988c;
-    --line: #34382f;
-    --line-strong: #4a5044;
-    --accent: #6fc7b7;
-    --accent-soft: #17332e;
+    --bg: #111722;
+    --surface: #192231;
+    --surface-soft: #202b3c;
+    --ink: #edf3f8;
+    --muted: #b3c0cc;
+    --subtle: #8493a3;
+    --line: #2d3a4b;
+    --line-strong: #405269;
+    --accent: #8FAFCB;
+    --accent-soft: #203247;
     --term: #8FAFCB;
-    --term-soft: rgba(32, 224, 176, 0.16);
-    --amber: #e4aa4b;
-    --amber-soft: #352a18;
-    --blue: #91b8ec;
-    --danger: #ee9185;
-    --shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
-    --header-bg: rgba(17, 19, 15, 0.9);
+    --term-soft: rgba(143, 175, 203, 0.16);
+    --amber: #d8ac72;
+    --amber-soft: #332b25;
+    --blue: #9fbee0;
+    --danger: #e59898;
+    --shadow: 0 18px 42px rgba(4, 9, 18, 0.34);
+    --header-bg: rgba(17, 23, 34, 0.9);
     color-scheme: dark;
 }
 
@@ -368,7 +368,7 @@ input {
 
 input:focus {
     border-color: var(--accent);
-    outline: 3px solid rgba(14, 111, 100, 0.12);
+    outline: 3px solid color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .search button,
@@ -424,8 +424,8 @@ input:focus {
 }
 
 html[data-theme="dark"] .category-pill {
-    border-color: rgba(255, 255, 255, 0.18);
-    background: rgba(25, 28, 23, 0.88);
+    border-color: rgba(143, 175, 203, 0.24);
+    background: rgba(25, 34, 49, 0.88);
     color: var(--ink);
 }
 
@@ -583,11 +583,11 @@ td {
 .category-count:focus-visible {
     border-color: var(--accent);
     background: var(--accent-soft);
-    outline: 3px solid rgba(14, 111, 100, 0.12);
+    outline: 3px solid color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .status-tag {
-    border: 1px solid #cfe8e3;
+    border: 1px solid var(--line-strong);
     background: var(--accent-soft);
     color: var(--accent);
     font-size: 13px;
@@ -745,7 +745,7 @@ td {
 
 .article-card-focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(14, 111, 100, 0.11);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 .article-card-body {
@@ -1033,7 +1033,7 @@ td {
 
 .article-note {
     margin: 24px 0;
-    border: 1px solid #cfe8e3;
+    border: 1px solid var(--line-strong);
     border-radius: 8px;
     background: var(--accent-soft);
 }
@@ -1065,7 +1065,7 @@ td {
 }
 
 .article-note[open] summary {
-    border-bottom: 1px solid #cfe8e3;
+    border-bottom: 1px solid var(--line-strong);
 }
 
 .article-note div {

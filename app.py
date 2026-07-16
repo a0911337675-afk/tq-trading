@@ -202,6 +202,14 @@ def article_published_at(meta: dict[str, str] | None = None) -> str | None:
     return cleaned
 
 
+def article_category(path: Path, meta: dict[str, str] | None = None) -> str:
+    if meta and meta.get("category"):
+        return meta["category"]
+    if path.name.startswith("daily_news_"):
+        return "每日大事"
+    return ARTICLE_CATEGORIES.get(path.name, "文章")
+
+
 def import_articles(conn: sqlite3.Connection) -> None:
     article_dir = CONTENT_DIR / "articles"
     if not article_dir.exists():
@@ -212,7 +220,7 @@ def import_articles(conn: sqlite3.Connection) -> None:
         meta, content = parse_frontmatter(raw_content)
         slug = article_slug(path, meta)
         title = article_title(content, path.stem, meta)
-        category = meta.get("category") or ARTICLE_CATEGORIES.get(path.name, "文章")
+        category = article_category(path, meta)
         excerpt = article_excerpt(content, meta)
         published_at = article_published_at(meta)
         conn.execute(
@@ -226,10 +234,19 @@ def import_articles(conn: sqlite3.Connection) -> None:
                 content = excluded.content,
                 source_file = excluded.source_file,
                 status = 'published',
-                published_at = excluded.published_at,
+                published_at = COALESCE(?, articles.published_at),
                 updated_at = CURRENT_TIMESTAMP
             """,
-            (slug, title, category, excerpt, content, str(path.relative_to(BASE_DIR)), published_at),
+            (
+                slug,
+                title,
+                category,
+                excerpt,
+                content,
+                str(path.relative_to(BASE_DIR)),
+                published_at,
+                published_at,
+            ),
         )
 
 
@@ -241,9 +258,14 @@ def resolve_category_filter(value: str = "") -> str:
     aliases = {
         "ai": "AI的經濟/資訊/文章",
         "ai-articles": "AI的經濟/資訊/文章",
+        "ai-econ-info-articles": "AI的經濟/資訊/文章",
+        "ai-statement": "AI 對帳單",
         "quant": "量化基礎",
+        "quant-basics": "量化基礎",
         "trading": "交易實戰",
+        "trading-practice": "交易實戰",
         "tools": "工具對比",
+        "tool-comparison": "工具對比",
         "daily": "每日大事",
         "daily-news": "每日大事",
     }

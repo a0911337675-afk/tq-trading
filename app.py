@@ -215,6 +215,7 @@ def import_articles(conn: sqlite3.Connection) -> None:
     if not article_dir.exists():
         return
 
+    source_files: list[str] = []
     for path in sorted(article_dir.glob("*.md")):
         raw_content = path.read_text(encoding="utf-8")
         meta, content = parse_frontmatter(raw_content)
@@ -223,6 +224,8 @@ def import_articles(conn: sqlite3.Connection) -> None:
         category = article_category(path, meta)
         excerpt = article_excerpt(content, meta)
         published_at = article_published_at(meta)
+        source_file = str(path.relative_to(BASE_DIR))
+        source_files.append(source_file)
         conn.execute(
             """
             INSERT INTO articles (slug, title, category, excerpt, content, source_file, status, published_at)
@@ -243,10 +246,20 @@ def import_articles(conn: sqlite3.Connection) -> None:
                 category,
                 excerpt,
                 content,
-                str(path.relative_to(BASE_DIR)),
+                source_file,
                 published_at,
                 published_at,
             ),
+        )
+    if source_files:
+        placeholders = ",".join("?" for _ in source_files)
+        conn.execute(
+            f"""
+            DELETE FROM articles
+            WHERE source_file LIKE 'content%articles%.md'
+            AND source_file NOT IN ({placeholders})
+            """,
+            source_files,
         )
 
 

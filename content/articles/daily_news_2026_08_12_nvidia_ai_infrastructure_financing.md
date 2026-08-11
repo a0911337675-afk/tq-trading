@@ -3,7 +3,7 @@ title: "2026/08/12 每日大事：NVIDIA 聯手華爾街，AI 算力開始成為
 description: "NVIDIA 與六家大型資產管理及金融機構合作，規劃動員超過 5,000 億美元第三方資金投入 AI 運算基礎設施。這不只是擴建資料中心，也代表 GPU、伺服器與長期算力合約正被重新包裝成金融資產。"
 slug: "daily-news-2026-08-12-nvidia-ai-infrastructure-financing"
 category: "每日大事"
-published_at: "2026-08-12 21:00:00"
+published_at: "2026-08-12 02:00:00"
 source_url: "https://nvidianews.nvidia.com/news/nvidia-partners-with-apollo-blackrock-blackstone-brookfield-goldman-sachs-and-kkr-to-establish-ai-compute-infrastructure-financing-platforms-to-mobilize-over-500-billion-of-third-party-capital"
 ---
 

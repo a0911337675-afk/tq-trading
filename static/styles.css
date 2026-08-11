@@ -1330,7 +1330,7 @@ html[data-theme="dark"] .article-filter.active span {
 
 .social-link {
     display: grid;
-    grid-template-columns: 52px minmax(0, 1fr) auto;
+    grid-template-columns: 52px minmax(0, 1fr) 72px 18px;
     align-items: center;
     gap: 14px;
     min-height: 116px;
@@ -1380,6 +1380,17 @@ html[data-theme="dark"] .article-filter.active span {
     font-size: 22px;
 }
 
+.link-qr {
+    display: block;
+    width: 72px;
+    height: 72px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px;
+    background: #fff;
+    object-fit: contain;
+}
+
 .tool-links-section {
     border-top: 1px solid var(--line);
     padding: 42px 0 0;
@@ -1407,7 +1418,7 @@ html[data-theme="dark"] .article-filter.active span {
 
 .tool-link-card {
     display: grid;
-    grid-template-columns: 48px minmax(0, 1fr) auto;
+    grid-template-columns: 48px minmax(0, 1fr) 76px 16px;
     align-items: start;
     gap: 14px;
     min-height: 170px;
@@ -1604,6 +1615,22 @@ html[data-theme="dark"] .article-filter.active span {
 
     .qr-panel a {
         width: min(210px, 100%);
+    }
+
+    .social-link {
+        grid-template-columns: 48px minmax(0, 1fr) 62px 16px;
+        padding: 14px;
+    }
+
+    .tool-link-card {
+        grid-template-columns: 48px minmax(0, 1fr) 68px 16px;
+        min-height: 124px;
+        padding: 16px;
+    }
+
+    .link-qr {
+        width: 62px;
+        height: 62px;
     }
 
     .offer-banner {

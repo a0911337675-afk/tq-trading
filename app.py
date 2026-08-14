@@ -78,6 +78,11 @@ ARTICLE_CATEGORY_DEFINITIONS = [
         "name": "每日大事",
         "description": "每日整理金融、AI、金融科技與新科技的重要事件。",
     },
+    {
+        "slug": "regulations",
+        "name": "法規資料庫",
+        "description": "追蹤金融法規、證券期貨規範、草案預告與金管會最新規定。",
+    },
 ]
 
 
@@ -281,6 +286,9 @@ def resolve_category_filter(value: str = "") -> str:
         "tool-comparison": "工具對比",
         "daily": "每日大事",
         "daily-news": "每日大事",
+        "law": "法規資料庫",
+        "regulation": "法規資料庫",
+        "regulations": "法規資料庫",
     }
     if cleaned in aliases:
         return aliases[cleaned]
@@ -537,6 +545,7 @@ class StockRequestHandler(SimpleHTTPRequestHandler):
 
         page_routes = {
             "/daily": "/daily.html",
+            "/regulations": "/regulations.html",
             "/faq": "/faq.html",
             "/links": "/community.html",
             "/community": "/community.html",

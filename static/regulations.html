@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>法規資料庫 - TQ Trading</title>
+    <script>
+        document.documentElement.dataset.theme = localStorage.getItem("tq-theme")
+            || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
+    <link rel="stylesheet" href="/styles.css?v=regulations-1">
+</head>
+<body>
+    <header class="site-header">
+        <div class="topbar">
+            <button class="menu-toggle" id="menuToggle" type="button" aria-label="開啟選單" aria-controls="siteDrawer" aria-expanded="false"><span></span><span></span><span></span></button>
+            <a class="brand" href="/"><img src="/assets/tq-trading-logo.png" alt=""><span>TQ Trading</span></a>
+            <span class="header-spacer"></span>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="切換顯示模式"></button>
+        </div>
+    </header>
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+        <aside class="site-drawer" id="siteDrawer" aria-label="網站選單">
+            <div class="drawer-head"><strong>網站選單</strong><button type="button" data-close-menu aria-label="關閉選單">×</button></div>
+            <nav class="drawer-nav"><a href="/">首頁</a><a href="/daily">每日大事</a><a class="active" href="/regulations">法規資料庫</a><a href="/faq">FAQ</a><a href="/links">快速連結</a></nav>
+        </aside>
+    </div>
+
+    <main class="shell utility-page regulation-page">
+        <header class="page-intro regulation-intro">
+            <p class="section-kicker">FINANCIAL REGULATION WATCH</p>
+            <h1>法規資料庫</h1>
+            <p class="meta">每日追蹤金融法規、證券交易法、期貨交易法與金管會最新規定，整理生效狀態、影響對象與實務重點。</p>
+        </header>
+
+        <section class="regulation-scope" aria-label="追蹤範圍">
+            <article><span>01</span><h2>法律與修法</h2><p>金融、證券、期貨及金融科技相關法律的制定與修正。</p></article>
+            <article><span>02</span><h2>命令與規則</h2><p>金管會、證期局發布的法規命令、行政規則與解釋令。</p></article>
+            <article><span>03</span><h2>草案預告</h2><p>尚未生效的預告內容會清楚標示，避免和正式規定混淆。</p></article>
+        </section>
+
+        <section class="official-source-panel">
+            <div>
+                <p class="section-kicker">OFFICIAL SOURCES</p>
+                <h2>官方查核來源</h2>
+                <p>本站提供白話摘要，法規效力與完整條文仍以主管機關正式公布內容為準。</p>
+            </div>
+            <div class="official-source-links">
+                <a href="https://law.fsc.gov.tw/LawResult.aspx?NLawTypeID=all&amp;content=1&amp;fei=1&amp;name=1&amp;now=1&amp;orderby=DD" target="_blank" rel="noopener">金管會主管法規查詢系統 <span aria-hidden="true">↗</span></a>
+                <a href="https://law.moj.gov.tw/" target="_blank" rel="noopener">全國法規資料庫 <span aria-hidden="true">↗</span></a>
+                <a href="https://gazette.nat.gov.tw/" target="_blank" rel="noopener">行政院公報資訊網 <span aria-hidden="true">↗</span></a>
+            </div>
+        </section>
+
+        <section class="regulation-list-section" aria-live="polite">
+            <div class="regulation-list-head">
+                <div>
+                    <p class="section-kicker">LATEST UPDATES</p>
+                    <h2>最新法規動態</h2>
+                </div>
+                <span class="regulation-count" id="regulationCount">讀取中</span>
+            </div>
+            <div class="regulation-list" id="regulationCards">
+                <p class="article-empty">載入中...</p>
+            </div>
+        </section>
+    </main>
+    <script src="/site.js?v=nav-theme-2"></script>
+    <script src="/regulations.js?v=regulations-1"></script>
+</body>
+</html>

@@ -395,14 +395,19 @@ function closeList(state, output) {
     output.push(`</${state.type}>`);
     state.type = "";
     state.className = "";
+    state.start = null;
 }
 
-function openList(type, state, output, className = "") {
+function openList(type, state, output, className = "", start = null) {
     if (state.type === type && state.className === className) return;
     closeList(state, output);
-    output.push(className ? `<${type} class="${className}">` : `<${type}>`);
+    const startAttribute = type === "ol" && Number.isInteger(start) && start > 1
+        ? ` start="${start}"`
+        : "";
+    output.push(className ? `<${type}${startAttribute} class="${className}">` : `<${type}${startAttribute}>`);
     state.type = type;
     state.className = className;
+    state.start = start;
 }
 
 function renderSeriesItem(value) {
@@ -512,7 +517,6 @@ function renderMarkdown(markdown) {
         if (!line.trim()) {
             flushParagraph(paragraph, output);
             flushTable(tableRows, output);
-            closeList(listState, output);
             continue;
         }
 
@@ -565,14 +569,15 @@ function renderMarkdown(markdown) {
             continue;
         }
 
-        const ordered = line.match(/^\d+\.\s+(.*)$/);
+        const ordered = line.match(/^(\d+)\.\s+(.*)$/);
         if (ordered) {
             flushParagraph(paragraph, output);
-            openList("ol", listState, output);
-            output.push(`<li>${renderInline(ordered[1])}</li>`);
+            openList("ol", listState, output, "", Number(ordered[1]));
+            output.push(`<li>${renderInline(ordered[2])}</li>`);
             continue;
         }
 
+        closeList(listState, output);
         paragraph.push(renderInline(line.trim()));
     }
 
